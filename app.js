@@ -33,7 +33,7 @@ function replyWithCard(email, callback){
 			text_block += "Twitter: "+process.env.TWITTER+"\n";
 			text_block += "Email: "+process.env.FROM_ADDRESS+"\n\n";
 			text_block += "You can reply to this email to contact me directly.\n\n";
-			text_block += process.env.SIGN_OFF"\n\n";
+			text_block += process.env.SIGN_OFF+"\n\n";
 			text_block += process.env.SIGNATURE;
 
 	var html_block = "<div style=\"width=100%; text-align:center;\">";
