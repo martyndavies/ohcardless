@@ -6,7 +6,6 @@ var express = require('express')
   , path = require('path')
   , sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD)
 
-
 var app = express();
 
 // all environments
