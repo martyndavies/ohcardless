@@ -29,12 +29,12 @@ if ('development' == app.get('env')) {
 function replyWithCard(email, callback){
 	var text_block = "Thanks for asking for a business card, sorry I didn\'t have any on me!\n\n";
 			text_block += "Here are my details:\n\n";
-			text_block += "Name: Martyn Davies (Developer Evangelist)\n";
-			text_block += "Twitter: @martynd\n";
-			text_block += "Email: martyn@sendgrid.com\n\n";
+			text_block += "Name: "+process.env.FROM_NAME+"\n";
+			text_block += "Twitter: "+process.env.TWITTER+"\n";
+			text_block += "Email: "+process.env.FROM_ADDRESS+"\n\n";
 			text_block += "You can reply to this email to contact me directly.\n\n";
-			text_block += "Nice meeting you!\n\n";
-			text_block += "MD";
+			text_block += process.env.SIGN_OFF"\n\n";
+			text_block += process.env.SIGNATURE;
 
 	var html_block = "<div style=\"width=100%; text-align:center;\">";
 			html_block += "<h2>Thanks for requesting a business card!</h2>";
