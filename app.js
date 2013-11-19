@@ -38,7 +38,7 @@ function replyWithCard(email, callback){
 
 	var html_block = "<div style=\"width=100%; text-align:center;\">";
 			html_block += "<h2>Thanks for requesting a business card!</h2>";
-			html_block += "<p><img src=\"https://dl.dropboxusercontent.com/u/5857478/ohcardless/businesscard-back.png\"/></p>";
+			html_block += "<p><img src=\""+process.env.CARD_IMAGE_URL+"\"/></p>";
 			html_block += "<p style=\"font-family:arial; font-size: 14px;\">You can also contact me directly by replying to this email.</p>";
 			html_block += "</div>";
 
