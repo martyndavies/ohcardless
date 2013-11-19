@@ -8,9 +8,6 @@
   "dependencies": {
     "dotenv": "*",
     "express": "3.3.4",
-    "jade": "*",
-    "sendgrid": "0.4.4",
-    "request": "*",
-    "sendstrip": "*"
+    "sendgrid": "0.4.4"
   }
 }
