@@ -5,7 +5,6 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD)
-  , strp = require('sendstrip');
 
 
 var app = express();
