@@ -1,20 +1,10 @@
 var dotenv = require('dotenv');
 dotenv.load();
 
-var express = require('express')
-  , http = require('http')
-  , path = require('path')
-  , sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD)
-  , redis = require('redis');
-
-var db;
-if (process.env.REDISTOGO_URL) {
-  var rtg = require("url").parse(process.env.REDISTOGO_URL);
-  var db = redis.createClient(rtg.port, rtg.hostname);
-  db.auth(rtg.auth.split(":")[1]);
-} else {
-  db = redis.createClient();
-}
+var express = require('express'),
+    http = require('http'),
+    path = require('path'),
+    sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
 
 var app = express();
 
@@ -57,8 +47,8 @@ function replyWithCard(email, callback){
   });
 
   // add some extra stuff
-  cardEmail.addFilterSetting('footer', 'enable', 1);
-  cardEmail.addFilterSetting('footer', 'text/html', '<div style=\"width:100%; text-align:center;\"><p>This app uses the <a href=\"http://sendgrid.com/docs/API_Reference/Webhooks/parse.html\">SendGrid Inbound Parse Webhook</a> &amp; <a href=\"http://github.com/sendgrid/sendgrid-nodejs\">NodeJS library</a>. You should too.</p></div>');
+  cardEmail.addFilter('footer', 'enable', 1);
+  cardEmail.addFilter('footer', 'text/html', '<div style=\"width:100%; text-align:center;\"><p>This app uses the <a href=\"http://sendgrid.com/docs/API_Reference/Webhooks/parse.html\">SendGrid Inbound Parse Webhook</a> &amp; <a href=\"http://github.com/sendgrid/sendgrid-nodejs\">NodeJS library</a>. You should too.</p></div>');
 
   sendgrid.send(cardEmail, function(err, json){
       if (err) {
@@ -69,21 +59,75 @@ function replyWithCard(email, callback){
     });
 };
 
+function forwardEmail(from, fromname, subject, body, callback){
+  console.log(fromname);
+  var emailToForward = new sendgrid.Email({
+    to: process.env.FORWARD_EMAIL,
+    from: from,
+    replyto: from,
+    fromname: fromname,
+    subject: subject,
+    html: body
+  });
+
+  sendgrid.send(emailToForward, function(err, json){
+    if (err){
+      callback(err);
+    } else {
+      callback(json);
+    }
+  });
+};
+
+function shouldReply(subject){
+  var lowercaseSubject = subject.toLowerCase();
+  if (lowercaseSubject == process.env.REPLY_PHRASE.toLowerCase()){
+    console.log('Subject matches phrase, replying...');
+    return true;
+  } else {
+    return false;
+  }
+};
+
 app.post('/receive', function(req, res){
   if(fromAddress = req.body.from.match(/<(.+)>/)){
     var email = fromAddress[1];
     var name = fromAddress[0];
-    console.log('storing');
-    db.sadd('contacts', fromAddress);
   } else {
     var email = req.body.from;
   }
-  replyWithCard(email, function(response){
-    console.log(response);
-    if (response.message == "success") {
-      res.send(200);
+
+  // should we reply to this email?
+  var reply = shouldReply(req.body.subject);
+
+  // yes, we should!
+  if (reply) {
+    replyWithCard(email, function(response){
+      console.log(response);
+      if (response.message == "success") {
+        res.send(200);
+      }
+    });
+
+  // no, we should not!
+  } else {
+    console.log('Forwarding....');
+    if (req.body.html){
+      var content = req.body.html;
+    } else {
+      var content = req.body.text;
     }
-  });
+
+    var thefromname = req.body.from.split(' ');
+
+    forwardEmail(email, thefromname[0]+' '+thefromname[1], req.body.subject, content, function(response){
+      console.log(response);
+      if (response.message == "success") {
+        console.log('Email successfully forwarded!');
+        res.send(200);
+      }
+    });
+  }
 });
 
 http.createServer(app).listen(app.get('port'), function(){

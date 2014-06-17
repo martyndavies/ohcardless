@@ -3,3 +3,4 @@ npm-debug.log
 .env
 public/.DS_Store
 .DS_Store
+ngrok
