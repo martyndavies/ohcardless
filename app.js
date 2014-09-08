@@ -22,33 +22,29 @@ if ('development' == app.get('env')) {
 }
 
 function replyWithCard(email, callback){
-  var text_block = "Thanks for asking for a business card, sorry I didn\'t have any on me!\n\n";
-      text_block += "Here are my details:\n\n";
-      text_block += "Name: "+process.env.FROM_NAME+"\n";
-      text_block += "Twitter: "+process.env.TWITTER+"\n";
-      text_block += "Email: "+process.env.FROM_ADDRESS+"\n\n";
-      text_block += "You can reply to this email to contact me directly.\n\n";
-      text_block += process.env.SIGN_OFF+"\n\n";
-      text_block += process.env.SIGNATURE;
-
-  var html_block = "<div style=\"width=100%; text-align:center;\">";
-      html_block += "<h2>Thanks for requesting a business card!</h2>";
-      html_block += "<p><img src=\""+process.env.CARD_IMAGE_URL+"\"/></p>";
-      html_block += "<p style=\"font-family:arial; font-size: 14px;\">You can also contact me directly by replying to this email.</p>";
-      html_block += "</div>";
 
   var cardEmail = new sendgrid.Email({
     to: email,
     from: process.env.FROM_ADDRESS,
     fromname: process.env.FROM_NAME,
-    subject: process.env.SUBJECT,
-    text: text_block,
-    html: html_block
+    subject: process.env.SUBJECT
   });
 
   // add some extra stuff
-  cardEmail.addFilter('footer', 'enable', 1);
-  cardEmail.addFilter('footer', 'text/html', '<div style=\"width:100%; text-align:center;\"><p>This app uses the <a href=\"http://sendgrid.com/docs/API_Reference/Webhooks/parse.html\">SendGrid Inbound Parse Webhook</a> &amp; <a href=\"http://github.com/sendgrid/sendgrid-nodejs\">NodeJS library</a>. You should too.</p></div>');
+  cardEmail.addSubstitution({'-from_name-': process.env.FROM_NAME});
+  cardEmail.addSubstitution({'-twitter-': process.env.TWITTER});
+  cardEmail.addSubstitution({'-from_address-': process.env.FROM_ADDRESS});
+  cardEmail.addSubstitution({'-sign_off-': process.env.SIGN_OFF});
+  cardEmail.addSubstitution({'-signature-': process.env.SIGNATURE});
+  cardEmail.addSubstitution({'-card_image_url-': process.env.CARD_IMAGE_URL});
+  cardEmail.setFilters({
+    'templates':{
+      'settings':{
+        'enabled': 1,
+        'template_id': '43bf6460-bdbf-4770-9623-689f083c06bb'
+      }
+    }
+  });
 
   sendgrid.send(cardEmail, function(err, json){
       if (err) {
