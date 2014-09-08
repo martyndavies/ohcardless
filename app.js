@@ -38,7 +38,7 @@ function replyWithCard(email, callback){
   cardEmail.addSubstitution({'-sign_off-': process.env.SIGN_OFF});
   cardEmail.addSubstitution({'-signature-': process.env.SIGNATURE});
   cardEmail.addSubstitution({'-card_image_url-': process.env.CARD_IMAGE_URL});
-  cardEmail.setFilters({
+  cardEmail.setHeader({
     'templates':{
       'settings':{
         'enabled': 1,
