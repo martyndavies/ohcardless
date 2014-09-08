@@ -28,7 +28,7 @@ function replyWithCard(email, callback){
     from: process.env.FROM_ADDRESS,
     fromname: process.env.FROM_NAME,
     subject: process.env.SUBJECT,
-    html: '<p></p>'
+    html: '<p></p>',
     x-smtpapi: {"filters":{"templates":{"settings":{"enabled": 1, "template_id": "43bf6460-bdbf-4770-9623-689f083c06bb"}}}}
   });
 
