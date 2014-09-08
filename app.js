@@ -29,6 +29,7 @@ function replyWithCard(email, callback){
     fromname: process.env.FROM_NAME,
     subject: process.env.SUBJECT,
     html: '<p></p>'
+    x-smtpapi: {"filters":{"templates":{"settings":{"enabled": 1, "template_id": "43bf6460-bdbf-4770-9623-689f083c06bb"}}}}
   });
 
   // add some extra stuff
@@ -38,13 +39,6 @@ function replyWithCard(email, callback){
   cardEmail.addSubstitution({'-sign_off-': process.env.SIGN_OFF});
   cardEmail.addSubstitution({'-signature-': process.env.SIGNATURE});
   cardEmail.addSubstitution({'-card_image_url-': process.env.CARD_IMAGE_URL});
-  cardEmail.addHeader({
-    'templates':{
-      'settings':{
-        'enabled': 1,
-        'template_id': '43bf6460-bdbf-4770-9623-689f083c06bb'
-      }
-    }
   });
 
   sendgrid.send(cardEmail, function(err, json){
