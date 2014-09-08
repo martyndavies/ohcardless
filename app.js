@@ -39,15 +39,14 @@ function replyWithCard(email, callback){
   cardEmail.addSubstitution({'-sign_off-': process.env.SIGN_OFF});
   cardEmail.addSubstitution({'-signature-': process.env.SIGNATURE});
   cardEmail.addSubstitution({'-card_image_url-': process.env.CARD_IMAGE_URL});
-  });
 
   sendgrid.send(cardEmail, function(err, json){
-      if (err) {
-        callback(err);
-      } else {
-        callback(json);
-      }
-    });
+    if (err) {
+      callback(err);
+    } else {
+      callback(json);
+    }
+  });
 };
 
 function forwardEmail(from, fromname, subject, body, callback){
