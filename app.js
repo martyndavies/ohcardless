@@ -28,7 +28,7 @@ function replyWithCard(email, callback){
     from: process.env.FROM_ADDRESS,
     fromname: process.env.FROM_NAME,
     subject: process.env.SUBJECT,
-    body: 'Body!'
+    html: '<p></p>'
   });
 
   // add some extra stuff
