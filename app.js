@@ -33,7 +33,7 @@ function replyWithCard(email, callback){
   });
 
   // add some extra stuff
-  cardEmail.addHeader('x-smtpapi': {"filters": {"templates":{"settings":{"enabled": 1, "template_id": "325ae5e7-69dd-4b95-b003-b0109f759cfa"}}}});
+  cardEmail.addHeader('x-smtpapi', {"filters": {"templates":{"settings":{"enabled": 1, "template_id": "325ae5e7-69dd-4b95-b003-b0109f759cfa"}}}});
   cardEmail.addSubstitution('-from_name-', process.env.FROM_NAME);
   cardEmail.addSubstitution('-twitter-', process.env.TWITTER);
   cardEmail.addSubstitution('-from_address-', process.env.FROM_ADDRESS);
