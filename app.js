@@ -24,6 +24,7 @@ if ('development' == app.get('env')) {
 function replyWithCard(email, callback){
 
   var cardEmail = new sendgrid.Email({
+    smtpapi:  new sendgrid.smtpapi(),
     to: email,
     from: process.env.FROM_ADDRESS,
     fromname: process.env.FROM_NAME,
