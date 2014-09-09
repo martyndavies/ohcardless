@@ -28,7 +28,8 @@ function replyWithCard(email, callback){
     from: process.env.FROM_ADDRESS,
     fromname: process.env.FROM_NAME,
     subject: process.env.SUBJECT,
-    html: '<p></p>'
+    html: '<h2>Thanks for requesting a business card!</h2>',
+    text: 'Thanks for asking for a business card, sorry I didn\'t have any on me!'
   });
 
   // add some extra stuff
