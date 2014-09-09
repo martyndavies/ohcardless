@@ -24,7 +24,6 @@ if ('development' == app.get('env')) {
 function replyWithCard(email, callback){
 
   var cardEmail = new sendgrid.Email({
-    smtpapi:  new sendgrid.smtpapi(),
     to: email,
     from: process.env.FROM_ADDRESS,
     fromname: process.env.FROM_NAME,
@@ -34,6 +33,7 @@ function replyWithCard(email, callback){
   });
 
   // add some extra stuff
+  cardEmail.addHeader('X-Transport', 'web');
   cardEmail.addSubstitution('-from_name-', process.env.FROM_NAME);
   cardEmail.addSubstitution('-twitter-', process.env.TWITTER);
   cardEmail.addSubstitution('-from_address-', process.env.FROM_ADDRESS);
