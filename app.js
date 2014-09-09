@@ -32,15 +32,16 @@ function replyWithCard(email, callback){
     text: 'Thanks for asking for a business card, sorry I didn\'t have any on me!' //body tag for html
   });
 
+  var template = {"filters": {"templates": {"settings": {"enabled": 1, "template_id": "325ae5e7-69dd-4b95-b003-b0109f759cfa"}}}};
   // add some extra stuff
   cardEmail.addHeader('X-Transport', 'web');
+  cardEmail.addHeader('X-Smtpapi', template);
   cardEmail.addSubstitution('-from_name-', process.env.FROM_NAME);
   cardEmail.addSubstitution('-twitter-', process.env.TWITTER);
   cardEmail.addSubstitution('-from_address-', process.env.FROM_ADDRESS);
   cardEmail.addSubstitution('-sign_off-', process.env.SIGN_OFF);
   cardEmail.addSubstitution('-signature-', process.env.SIGNATURE);
   cardEmail.addSubstitution('-card_image_url-', process.env.CARD_IMAGE_URL);
-  cardEmail.setFilters({"templates":{"settings":{"enabled": 1, "template_id": "325ae5e7-69dd-4b95-b003-b0109f759cfa"}}});
 
   sendgrid.send(cardEmail, function(err, json){
     if (err) {
