@@ -4,7 +4,7 @@ dotenv.load();
 var express = require('express'),
     http = require('http'),
     path = require('path'),
-    sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+    sendgrid = require('sendgrid')(process.env.api_user, process.env.api_key);
 
 var app = express();
 
@@ -80,6 +80,10 @@ function shouldReply(subject){
     return false;
   }
 };
+
+app.get('/', function(req, res){
+  res.render('index.html');
+});
 
 app.post('/receive', function(req, res){
   if(fromAddress = req.body.from.match(/<(.+)>/)){

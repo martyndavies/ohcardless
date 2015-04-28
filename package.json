@@ -1,6 +1,6 @@
 {
   "name": "ohcardless",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "scripts": {
     "start": "node app.js"
@@ -8,6 +8,6 @@
   "dependencies": {
     "dotenv": "*",
     "express": "3.3.4",
-    "sendgrid": "1.2.0"
+    "sendgrid": "1.7.0"
   }
 }
