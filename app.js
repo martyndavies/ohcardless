@@ -4,7 +4,7 @@ dotenv.load();
 var express = require('express'),
     http = require('http'),
     path = require('path'),
-    sendgrid = require('sendgrid')(process.env.api_user, process.env.api_key);
+    sendgrid = require('sendgrid')(process.env.api_key);
 
 var app = express();
 
